@@ -160,4 +160,4 @@ When the next monsoon comes, I want every street in Jammu to know before the wat
 
 ---
 
-*Built solo by Adil Mahajan (Dupahar). The deployed agent runs on Amazon Nova Pro via Bedrock. The land-change and heat layers were ported from my earlier LandGuard prototype. Data: Copernicus Sentinel-1/-2 and DEM (ESA), USGS Landsat, © OpenStreetMap contributors, Overture Maps Foundation, Open-Meteo (CC BY 4.0), Amazon Location Service. Basemap © Mapbox.*
+*Built solo by Adil Mahajan (Dupahar). The deployed agent runs on Amazon Nova Pro via Bedrock. Data: Copernicus Sentinel-1/-2 and DEM (ESA), USGS Landsat, © OpenStreetMap contributors, Overture Maps Foundation, Open-Meteo (CC BY 4.0), Amazon Location Service. Basemap © Mapbox.*
