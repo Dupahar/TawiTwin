@@ -2,7 +2,7 @@
 
 *How I built Tawi Twin, a monsoon and heat command tool for Jammu, in four days on AWS, and what fought back.*
 
-> **Live:** https://d2r8k00l2fxqnu.cloudfront.net · **Code:** https://github.com/Dupahar/TawiTwin
+> **Live:** https://d2r8k00l2fxqnu.cloudfront.net · **Code:** https://github.com/Dupahar/TawiTwin · **Published on:** [AWS Builder Center](https://builder.aws.com/content/3KV01tPoho6gi9F3plApVSr53Fp/kal-paani-bharega-teaching-a-city-to-answer-the-only-flood-question-that-matters-tawitwin)
 
 ---
 

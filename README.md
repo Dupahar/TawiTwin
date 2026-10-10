@@ -8,7 +8,7 @@
 
 [![Try it live](https://img.shields.io/badge/🌍_Try_it_live-on_AWS-FF9900?style=for-the-badge&logo=amazonwebservices&logoColor=white)](https://d2r8k00l2fxqnu.cloudfront.net)
 [![Watch the film](https://img.shields.io/badge/▶_Watch_the_film-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/7ypGLr-2Zvk)
-[![Read the story](https://img.shields.io/badge/📖_Read_the_story-blog-222222?style=for-the-badge)](docs/blog.md)
+[![Read the story](https://img.shields.io/badge/📖_Read_the_story-AWS_Builder_Center-232F3E?style=for-the-badge&logo=amazonwebservices&logoColor=white)](https://builder.aws.com/content/3KV01tPoho6gi9F3plApVSr53Fp/kal-paani-bharega-teaching-a-city-to-answer-the-only-flood-question-that-matters-tawitwin)
 
 ![AWS Lambda](https://img.shields.io/badge/AWS_Lambda-FF9900?logo=awslambda&logoColor=white)
 ![Amazon Bedrock](https://img.shields.io/badge/Amazon_Bedrock-FF9900?logo=amazonwebservices&logoColor=white)
