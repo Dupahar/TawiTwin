@@ -1,0 +1,27 @@
+BLOCK 1  ->  save as block1.mp3
+On the twenty-sixth of August 2025, Jammu got two hundred and ninety-six millimetres of rain in twenty-four hours. A new record. The Tawi rose above its highest flood level, part of the Fourth Tawi Bridge gave way, and more than five thousand people were evacuated.
+
+BLOCK 2  ->  save as block2.mp3
+Residents had no warning for their own street. The city had no list of where to send pumps or which drains to clear first. Tawi Twin is a monsoon and heat command tool for Jammu. For residents, and for the city's control room.
+
+BLOCK 3  ->  save as block3.mp3
+Let's replay the night before the flood. A resident asks, in Hinglish: will Bhagwati Nagar flood tomorrow? The agent finds the colony, pulls the evidence, and checks the forecast. High waterlogging risk, with one hundred and eighty-five millimetres expected. It explains why: satellites saw water here, the ground is low, and news reports named this area. Then what to do, the nearest hospital, and a school on higher ground.
+
+BLOCK 4  ->  save as block4.mp3
+One tap shares the alert on WhatsApp, where Jammu actually talks. It answers in Hindi, Hinglish or English, by typing or by voice.
+
+BLOCK 5  ->  save as block5.mp3
+Underneath, every one of a hundred and eighty-eight thousand buildings is scored. How close to the river, how high above the nearest drain, and whether radar saw water beside it on the twenty-seventh of August. We checked it against the localities news reports named as flooded: buildings there are one and a half times more likely to be rated high risk than the city average.
+
+BLOCK 6  ->  save as block6.mp3
+For the control room, the same data becomes a plan. Thirty-nine areas at high alert, twelve thousand buildings inside them. Where to pre-position dewatering pumps. Which drains to clear first. Which low-lying schools to check.
+
+BLOCK 7  ->  save as block7.mp3
+Residents can report waterlogging with a photo. A vision model on Amazon Bedrock checks it, rates the severity, and it lands in the control room's inbox, ready to assign.
+
+BLOCK 8  ->  save as block8.mp3
+The whole backend runs on AWS. The agent is built with Strands Agents on Amazon Bedrock. Amazon Location Service finds colonies the open maps miss. Lambda on Graviton, API Gateway, DynamoDB, and EventBridge refresh the forecast every hour. Buildings come from AWS Open Data, served through S3 and CloudFront. The whole stack is one AWS SAM template.
+
+BLOCK 9  ->  save as block9.mp3
+And today? It's dry, and Tawi Twin says so. When the next monsoon comes, every street in Jammu will know before the water does. Tawi Twin.
+

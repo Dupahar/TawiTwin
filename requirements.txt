@@ -1,0 +1,7 @@
+# Offline data pipeline (scripts/). The Lambda API has no third-party deps yet.
+geopandas>=1.2
+h3>=4.5
+pyarrow>=25
+rasterio>=1.5
+requests>=2.34
+shapely>=2.2

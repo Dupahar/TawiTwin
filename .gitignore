@@ -1,0 +1,15 @@
+.aws-sam/
+.venv/
+__pycache__/
+*.pyc
+.env
+site/config.json
+data/raw/
+data/cache/
+*.tif
+!site/**/*.tif
+.scratch/
+.build/
+docs/video/build/
+video/node_modules/
+video/out/

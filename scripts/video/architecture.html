@@ -1,0 +1,49 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Tawi Twin architecture</title>
+<style>
+  :root { --bg:#121211; --card:#1f1f1d; --line:#383835; --t1:#fff; --t2:#c3c2b7; --aws:#ff9900; --blue:#3987e5; }
+  * { box-sizing: border-box; }
+  body { margin:0; height:100vh; background: radial-gradient(ellipse at 20% 10%, #0d366b55, transparent 60%), var(--bg);
+    color:var(--t1); font-family: "Inter", system-ui, "Segoe UI", sans-serif; display:flex; flex-direction:column; padding:40px 56px; }
+  h1 { margin:0 0 4px; font-size:38px; } h1 span { color: var(--aws); }
+  .sub { color:var(--t2); font-size:18px; margin-bottom:26px; }
+  .grid { flex:1; display:grid; grid-template-columns: 1fr 1.25fr 1fr; gap:26px; align-items:stretch; }
+  .col { display:flex; flex-direction:column; gap:14px; }
+  .col h2 { font-size:15px; letter-spacing:1.5px; text-transform:uppercase; color:var(--t2); margin:0 0 2px; }
+  .box { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:13px 16px; opacity:0;
+    transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+  .box.show { opacity:1; transform:none; }
+  .box b { display:block; font-size:19px; } .box small { color:var(--t2); font-size:14px; }
+  .aws { border-left:5px solid var(--aws); } .oss { border-left:5px solid var(--blue); }
+  .tag { float:right; font-size:11px; color:#000; background:var(--aws); border-radius:6px; padding:2px 7px; font-weight:700; }
+  .tag.o { background: var(--blue); color:#fff; }
+</style></head>
+<body>
+  <h1>Where AWS fits: <span>the whole backend</span></h1>
+  <div class="sub">Region ap-south-1 (Mumbai) · one AWS SAM template · Graviton (arm64) Lambdas</div>
+  <div class="grid">
+    <div class="col">
+      <h2>People</h2>
+      <div class="box" data-t="0.3"><b>Resident on a phone</b><small>Hindi · Hinglish · English · voice · WhatsApp share</small></div>
+      <div class="box" data-t="0.6"><b>Control room (JMC / ICCC)</b><small>Situation board, pumps, drains, report inbox</small></div>
+      <h2 style="margin-top:14px">Data (offline pipeline)</h2>
+      <div class="box aws" data-t="18.5"><span class="tag">AWS Open Data</span><b>Overture buildings</b><small>188,180 footprints, queried in place with DuckDB</small></div>
+      <div class="box" data-t="19.0"><b>Sentinel-1 · Copernicus DEM · Landsat</b><small>Flood map with OpenCV, terrain, heat</small></div>
+    </div>
+    <div class="col">
+      <h2>Intelligence</h2>
+      <div class="box oss" data-t="2.5"><span class="tag o">AWS open source</span><b>Strands Agents</b><small>7 tools: find place, area evidence, forecast, situation, priorities, facilities</small></div>
+      <div class="box aws" data-t="3.0"><span class="tag">AWS</span><b>Amazon Bedrock</b><small>Agent reasoning + photo triage (Amazon Nova Pro)</small></div>
+      <div class="box aws" data-t="4.5"><span class="tag">AWS</span><b>Amazon Location Service</b><small>Finds colonies open maps miss; names every area</small></div>
+      <div class="box aws" data-t="9.0"><span class="tag">AWS</span><b>AWS Lambda on Graviton + API Gateway</b><small>API, agent, citizen reports</small></div>
+      <div class="box aws" data-t="11.5"><span class="tag">AWS</span><b>Amazon DynamoDB</b><small>Forecasts, alerts, reports, rate limits</small></div>
+      <div class="box aws" data-t="13.5"><span class="tag">AWS</span><b>Amazon EventBridge Scheduler</b><small>Refreshes the 48 h forecast every hour</small></div>
+    </div>
+    <div class="col">
+      <h2>Delivery</h2>
+      <div class="box aws" data-t="20.5"><span class="tag">AWS</span><b>Amazon S3 + CloudFront</b><small>Site, map layers, 1,315 building tiles, report photos (private)</small></div>
+      <div class="box oss" data-t="22.5"><span class="tag o">AWS open source</span><b>AWS SAM</b><small>The whole stack in one template</small></div>
+      <div class="box aws" data-t="23.5"><span class="tag">AWS</span><b>Amazon Polly</b><small>This narration</small></div>
+    </div>
+  </div>
+</body></html>

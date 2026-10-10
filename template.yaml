@@ -1,0 +1,244 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Tawi Twin - flood and heat digital twin for Jammu
+
+Parameters:
+  AgentModelId:
+    Type: String
+    Default: apac.amazon.nova-pro-v1:0
+    Description: Bedrock model or inference profile for the chat agent
+  OfficerKey:
+    Type: String
+    NoEcho: true
+    Description: Demo shared key for officer actions (PATCH /reports). Replace with Cognito for production.
+
+Globals:
+  Function:
+    Runtime: python3.13
+    Architectures: [arm64]
+    MemorySize: 256
+    Timeout: 10
+
+Resources:
+  # ---------- API ----------
+  Api:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins: ["*"]
+        AllowMethods: [GET, POST, PATCH, OPTIONS]
+        AllowHeaders: [content-type, x-officer-key]
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 20
+        ThrottlingRateLimit: 10
+
+  Table:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - { AttributeName: pk, AttributeType: S }
+        - { AttributeName: sk, AttributeType: S }
+      KeySchema:
+        - { AttributeName: pk, KeyType: HASH }
+        - { AttributeName: sk, KeyType: RANGE }
+      TimeToLiveSpecification: { AttributeName: ttl, Enabled: true }
+
+  CoreLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      Description: ttcore shared logic + area/gazetteer/facility indexes
+      ContentUri: backend/layer/
+      CompatibleRuntimes: [python3.13]
+      CompatibleArchitectures: [arm64]
+
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/api/
+      Handler: app.handler
+      Layers: [!Ref CoreLayer]
+      Environment:
+        Variables:
+          APP_VERSION: "0.2.0"
+          TABLE_NAME: !Ref Table
+      Policies:
+        - DynamoDBReadPolicy: { TableName: !Ref Table }
+        - Statement:
+            - Effect: Allow
+              Action: [geo-places:Geocode]
+              Resource: "*"
+      Events:
+        Health: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /health, Method: GET } }
+        Alerts: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /alerts, Method: GET } }
+        Area: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: "/areas/{id}", Method: GET } }
+        Locate: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /locate, Method: GET } }
+        Place: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /place, Method: GET } }
+        Situation: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /situation, Method: GET } }
+
+  ForecastFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/forecast/
+      Handler: app.handler
+      Timeout: 60
+      Layers: [!Ref CoreLayer]
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref Table
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref Table }
+      Events:
+        Hourly:
+          Type: ScheduleV2
+          Properties:
+            ScheduleExpression: "rate(1 hour)"
+            Description: Refresh Open-Meteo 48 h forecast and per-area alerts
+
+  AgentFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      SkipBuild: true   # package is pre-built for linux/arm64 by scripts/vendor_agent.ps1
+    Properties:
+      CodeUri: .build/agent/   # assembled by scripts/vendor_agent.ps1
+      Handler: app.handler
+      Timeout: 29
+      MemorySize: 1024
+      Layers: [!Ref CoreLayer]
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref Table
+          MODEL_ID: !Ref AgentModelId
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref Table }
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:InvokeModel, bedrock:InvokeModelWithResponseStream]
+              Resource:
+                - "arn:aws:bedrock:*::foundation-model/*"
+                - !Sub "arn:aws:bedrock:*:${AWS::AccountId}:inference-profile/*"
+            - Effect: Allow
+              Action: [geo-places:Geocode]
+              Resource: "*"
+      Events:
+        Chat: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /chat, Method: POST } }
+
+  ReportsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault: { SSEAlgorithm: AES256 }
+      LifecycleConfiguration:
+        Rules:
+          - { Id: expire-photos, Status: Enabled, ExpirationInDays: 90 }
+      CorsConfiguration:
+        CorsRules:
+          - AllowedMethods: [POST, GET]
+            AllowedOrigins: ["*"]
+            AllowedHeaders: ["*"]
+            MaxAge: 3000
+
+  ReportsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/reports/
+      Handler: app.handler
+      Timeout: 29
+      MemorySize: 512
+      Layers: [!Ref CoreLayer]
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref Table
+          REPORTS_BUCKET: !Ref ReportsBucket
+          VISION_MODEL_ID: !Ref AgentModelId
+          OFFICER_KEY: !Ref OfficerKey
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref Table }
+        - S3CrudPolicy: { BucketName: !Ref ReportsBucket }
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:InvokeModel]
+              Resource:
+                - "arn:aws:bedrock:*::foundation-model/*"
+                - !Sub "arn:aws:bedrock:*:${AWS::AccountId}:inference-profile/*"
+      Events:
+        Upload: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /reports/upload, Method: POST } }
+        Create: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /reports, Method: POST } }
+        List: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /reports, Method: GET } }
+        Update: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: "/reports/{id}", Method: PATCH } }
+
+  # ---------- Static site ----------
+  SiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  SiteOAC:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub "${AWS::StackName}-site-oac"
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  SiteDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: Tawi Twin site
+        DefaultRootObject: index.html
+        HttpVersion: http2and3
+        PriceClass: PriceClass_200
+        Origins:
+          - Id: site
+            DomainName: !GetAtt SiteBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt SiteOAC.Id
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+        DefaultCacheBehavior:
+          TargetOriginId: site
+          ViewerProtocolPolicy: redirect-to-https
+          Compress: true
+          # AWS managed policy: CachingOptimized
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+
+  SiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref SiteBucket
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub "${SiteBucket.Arn}/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${SiteDistribution}"
+
+Outputs:
+  ApiUrl:
+    Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com"
+  SiteUrl:
+    Value: !Sub "https://${SiteDistribution.DomainName}"
+  SiteBucketName:
+    Value: !Ref SiteBucket
+  DistributionId:
+    Value: !Ref SiteDistribution

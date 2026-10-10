@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tawi Twin · Monsoon &amp; heat command for Jammu</title>
+  <meta name="description" content="Building-level flood and heat risk for Jammu: radar flood history, terrain, live forecast alerts, citizen reports and an AI assistant.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="map" aria-label="Map of Jammu"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">◈</span>
+      <div><strong>Tawi Twin</strong><small>Monsoon &amp; heat command · Jammu</small></div>
+    </div>
+    <div class="mode" role="tablist" aria-label="Forecast mode">
+      <button role="tab" data-mode="live" aria-selected="true">Live · next 48 h</button>
+      <button role="tab" data-mode="replay" aria-selected="false">Replay · 26 Aug 2025</button>
+    </div>
+  </header>
+
+  <div id="banner" class="banner" role="status" aria-live="polite">Loading forecast…</div>
+
+  <nav class="layers" aria-label="Map layers">
+    <button data-view="risk" class="on">Risk now</button>
+    <button data-view="buildings">Buildings</button>
+    <button data-view="flood">Flood · 27 Aug 2025</button>
+    <button data-view="heat">Heat</button>
+    <button data-view="drains">Drains</button>
+    <button data-view="change">Land change</button>
+    <span class="sep"></span>
+    <button id="toggleSat" aria-pressed="false">Satellite</button>
+    <button id="toggle3d" aria-pressed="false">3D</button>
+    <button id="legendBtn" aria-pressed="false">Legend</button>
+  </nav>
+  <div id="legend" class="legend" aria-live="polite"></div>
+
+  <aside id="panel" class="panel">
+    <button class="sheet-handle" id="sheetHandle" aria-label="Expand or collapse panel"></button>
+    <div class="tabs" role="tablist">
+      <button role="tab" data-tab="ask" aria-selected="true">Ask</button>
+      <button role="tab" data-tab="report" aria-selected="false">Report</button>
+      <button role="tab" data-tab="command" aria-selected="false">Command</button>
+      <button role="tab" data-tab="about" aria-selected="false">About</button>
+    </div>
+
+    <!-- ASK: residents and officers talk to the agent -->
+    <section id="tab-ask" class="tab">
+      <div id="area-card" class="area-card" hidden></div>
+      <div id="chat" class="chat" aria-live="polite">
+        <div class="msg bot"><p><strong>Namaste!</strong> Ask about any colony in Jammu: will it waterlog, how hot does
+          it get, where is high ground. Officers can ask where to send pumps. Hindi, Hinglish or English.</p></div>
+      </div>
+      <div class="chips" id="chips">
+        <button>Kal Bhagwati Nagar mein paani bharega?</button>
+        <button data-locate>📍 Is my area safe?</button>
+        <button>Where should we pre-position pumps?</button>
+        <button>गांधी नगर में गर्मी कितनी है?</button>
+      </div>
+      <form id="ask" class="ask" autocomplete="off">
+        <button type="button" id="mic" title="Speak (Hindi or English)" aria-label="Speak">🎙</button>
+        <input id="q" maxlength="500" placeholder="Ask about your colony…" aria-label="Your question">
+        <button type="submit" aria-label="Send">➤</button>
+      </form>
+    </section>
+
+    <!-- REPORT: citizen waterlogging report -->
+    <section id="tab-report" class="tab" hidden>
+      <h3 class="h">Report waterlogging</h3>
+      <p class="muted">Send a photo of a waterlogged street or blocked drain. AI checks it, then it goes straight to the
+        control room's inbox. No name or phone number is stored.</p>
+      <form id="report-form" class="report-form">
+        <label class="photo-drop" for="photo">
+          <input id="photo" type="file" accept="image/*" capture="environment" required>
+          <span id="photo-label">📷 Take or choose a photo</span>
+          <img id="photo-preview" alt="" hidden>
+        </label>
+        <button type="button" id="report-loc" class="secondary">📍 Use my location</button>
+        <div id="report-loc-text" class="muted">Location: not set (or tap the map)</div>
+        <textarea id="report-note" maxlength="280" placeholder="Optional: what's happening? e.g. knee-deep near the market"></textarea>
+        <button type="submit" class="primary" id="report-send">Send report</button>
+      </form>
+      <div id="report-result"></div>
+    </section>
+
+    <!-- COMMAND: officers' situation board -->
+    <section id="tab-command" class="tab" hidden>
+      <div id="situation" class="situation"><p class="muted">Loading situation…</p></div>
+      <h3 class="h">Citizen reports</h3>
+      <div id="reports" class="reports"><p class="muted">Loading…</p></div>
+      <h3 class="h">Pre-monsoon priorities</h3>
+      <p class="muted">Areas ranked by hazard <em>where people live</em> (hazard score × buildings). Relative and
+        indicative, not calibrated.</p>
+      <div class="seg" role="radiogroup">
+        <button data-rank="flood_priority_score" class="on">Flood</button>
+        <button data-rank="heat">Heat</button>
+        <button data-rank="priority_score">Combined</button>
+      </div>
+      <ol id="ranking" class="ranking"></ol>
+      <button id="csv" class="link">⬇ Download all 284 areas (CSV)</button>
+    </section>
+
+    <section id="tab-about" class="tab about" hidden>
+      <h3>For city corporations</h3>
+      <p>Tawi Twin is a monsoon and heat command layer for an Integrated Command &amp; Control Centre: building-level
+        risk, live alerts, where to send pumps, which drains to clear, and a citizen channel with AI triage. Every input
+        is free global data, so a new city can be onboarded in a day.</p>
+      <h3>What changes, and for whom</h3>
+      <div class="impact">
+        <div><b>A resident in Gujjar Nagar</b> asks in Hindi “kal paani bharega?” and gets a yes/no for the next 48 h,
+          why, what to do, and the nearest hospital and high-ground school. One tap shares it on WhatsApp.</div>
+        <div><b>The control room</b> sees which areas and how many buildings are at risk before the rain, where to
+          pre-position dewatering pumps, which drains to clear first, and citizen photos already triaged by AI.</div>
+        <div><b>The planning wing</b> gets a ranked pre-monsoon list of drains and areas, weighted by how many
+          people live there, as a CSV.</div>
+      </div>
+      <h3>Does it match what happened?</h3>
+      <p>We checked 8 localities that news reports named as flooded on 26–27 Aug 2025 (inside the mapped area).
+        Near them, <b>36% of buildings</b> are rated high or very high flood exposure, against <b>25%</b> city-wide
+        (1.5×); for “very high” it is 2.9% vs 0.8%. Nikki Tawi, Beli Charan and Bhagwati Nagar are clear hits.
+        Gurkha Nagar, Qasim Nagar and Rajiv Nagar are misses: the 30 m terrain model includes buildings, and the
+        radar passed a day after the peak. Small sample: a sanity check, not an accuracy figure.
+        Sources: <a href="https://www.onmanorama.com/news/india/2025/08/27/jammu-floods-over-3500-resuced-by-army-ndrf-personnel.html" target="_blank" rel="noopener">Onmanorama</a>,
+        <a href="https://www.sphereindia.org.in/sites/default/files/2025-09/SitRep_02-_J&amp;K_Cloudburst,_Flood,_and_Landslide_28-08-2025[1].pdf" target="_blank" rel="noopener">Sphere India SitRep</a>,
+        <a href="https://www.newsonair.gov.in/incessant-rains-wreak-havoc-across-jammu-division-in-past-40-hours" target="_blank" rel="noopener">News On AIR</a>.</p>
+      <h3>The event behind it</h3>
+      <p>On <strong>26–27 Aug 2025</strong> Jammu received a record <strong>296 mm of rain in 24 hours</strong>, the Tawi
+        crossed its highest flood level and part of the 4th Tawi Bridge at Bhagwati Nagar gave way.</p>
+      <h3>Evidence</h3>
+      <ul>
+        <li><b>Flood:</b> Sentinel-1 radar, 27 Aug 2025 18:34 IST vs 15 Aug (change detection, OpenCV).</li>
+        <li><b>Terrain:</b> Copernicus DEM 30 m, height above nearest drain.</li>
+        <li><b>Buildings:</b> 188,180 footprints, Overture Maps (AWS Open Data). Heights are a uniform 6 m (not in source).</li>
+        <li><b>Heat:</b> Landsat 8/9 surface temperature, Apr–Jun 2024–26.</li>
+        <li><b>Land change:</b> Sentinel-2, 2019-20 vs 2025-26, in the flood-prone zone.</li>
+        <li><b>Forecast:</b> Open-Meteo, refreshed hourly.</li>
+      </ul>
+      <h3>Limits</h3>
+      <p>Radar misses water between buildings. The flood-prone zone is a proxy, not the official demarcation. Drains are
+        those mapped in OpenStreetMap only. Land-cover change is <em>detected change</em>, not a finding of encroachment.
+        Not an official warning: follow JMC, SDMA and IMD. Emergency: <b>112</b>.</p>
+      <h3>Built on AWS</h3>
+      <p>CloudFront + S3 (site, vector tiles, photos) · API Gateway + Lambda on Graviton · DynamoDB · EventBridge
+        Scheduler · Amazon Bedrock with Strands Agents (chat + photo triage) · Amazon Location Service · AWS Open Data.
+        Deployed with AWS SAM. Map: Mapbox.</p>
+      <p class="muted">Data: © OpenStreetMap contributors, Copernicus (ESA), USGS Landsat, Overture Maps, Open-Meteo (CC BY 4.0).
+        <span id="api-status"></span></p>
+    </section>
+  </aside>
+
+  <div id="intro" class="intro" hidden>
+    <div class="intro-card">
+      <p class="eyebrow">26–27 August 2025 · Jammu</p>
+      <h1>296 mm of rain in 24 hours.</h1>
+      <p>The Tawi rose above its highest flood level ever recorded. Satellites saw where the water went.
+        <strong>Tawi Twin turns that memory into a plan for the next one.</strong></p>
+      <div class="intro-actions">
+        <button id="intro-replay" class="primary">Replay the flood</button>
+        <button id="intro-live">Check my area today</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

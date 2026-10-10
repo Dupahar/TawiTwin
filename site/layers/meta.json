@@ -1,0 +1,56 @@
+{
+  "source": "LandGuard prototype (3 Oct 2026), ported into Tawi Twin",
+  "change_flags": {
+    "sensor": "Sentinel-2 L2A annual composites",
+    "before": "2019-10/2020-09",
+    "after": "2025-10/2026-09",
+    "n": 718,
+    "n_flood_prone": 434
+  },
+  "heat": {
+    "sensor": "Landsat 8/9 C2 L2 surface temperature, Apr-Jun 2024-2026 median, 500 m cells",
+    "scenes": 66,
+    "date_range": [
+      "2024-04-06",
+      "2026-06-24"
+    ],
+    "city_median_c": 41.4
+  },
+  "floodplain_proxy": "Riverbed + 200 m buffer. NOT the official demarcation (not public).",
+  "scores": {
+    "flood_weights": {
+      "flood_2025_share": 0.35,
+      "low_lying_share": 0.25,
+      "floodplain_share": 0.2,
+      "sink_share": 0.1,
+      "nallah_share": 0.1
+    },
+    "note": "(0-1, transparent and NOT calibrated; percentile ranks across the 284 areas):\n  flood_score = 0.35*flood_2025 + 0.25*low_lying + 0.20*floodplain + 0.10*sinks + 0.10*nallah\n  heat_score  = percentile of summer LST anomaly\n  combined    = mean(flood_score, heat_score); tier: high >= 0.66, medium >= 0.4, else low\n  priority    = combined * building percentile (Overture buildings): hazard where people actually live,\n                used for the officers' ranking. Areas with < 50 buildings are flagged sparsely_built."
+  },
+  "flood_2025_08_27": {
+    "event": "Jammu extreme rain and Tawi flood, 26-27 Aug 2025",
+    "pre_scene": "S1A_IW_GRDH_1SDV_20250815T130444_20250815T130509_060547_0787AB_rtc",
+    "post_scene": "S1A_IW_GRDH_1SDV_20250827T130444_20250827T130509_060722_078E90_rtc",
+    "post_time_utc": "2025-08-27T13:04:56.838632+00:00",
+    "vv_threshold_db": {
+      "pre": -15.0,
+      "post": -15.0
+    },
+    "valid_fraction": 1.0,
+    "water_pre_ha": 137.5,
+    "water_post_ha": 359.6,
+    "new_flood_ha": 215.6,
+    "method": [
+      "Method (standard SAR flood practice, e.g. UN-SPIDER recommended practice; thresholds documented here):",
+      "  1. RTC gamma0 -> dB, 5x5 median speckle filter (OpenCV).",
+      "  2. Water = VV below a scene-adaptive Otsu threshold (clamped to [-20, -15] dB) AND VH below -22 dB.",
+      "  3. Flood (new water) = water on the post-event image, not water before, AND a VV drop >= 3 dB.",
+      "  4. Terrain screening: HAND <= 15 m and slope <= 8 deg (removes radar shadow on hills).",
+      "  5. OpenCV morphological opening + connected components >= MIN_PIXELS to drop speckle noise."
+    ],
+    "terrain_sinks": {
+      "n": 291,
+      "area_ha": 288.1
+    }
+  }
+}

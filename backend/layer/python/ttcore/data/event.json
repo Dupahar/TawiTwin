@@ -1,0 +1,26 @@
+{
+  "event": "Jammu extreme rain and Tawi flood, 26-27 Aug 2025",
+  "pre_scene": "S1A_IW_GRDH_1SDV_20250815T130444_20250815T130509_060547_0787AB_rtc",
+  "post_scene": "S1A_IW_GRDH_1SDV_20250827T130444_20250827T130509_060722_078E90_rtc",
+  "post_time_utc": "2025-08-27T13:04:56.838632+00:00",
+  "vv_threshold_db": {
+    "pre": -15.0,
+    "post": -15.0
+  },
+  "valid_fraction": 1.0,
+  "water_pre_ha": 137.5,
+  "water_post_ha": 359.6,
+  "new_flood_ha": 215.6,
+  "method": [
+    "Method (standard SAR flood practice, e.g. UN-SPIDER recommended practice; thresholds documented here):",
+    "  1. RTC gamma0 -> dB, 5x5 median speckle filter (OpenCV).",
+    "  2. Water = VV below a scene-adaptive Otsu threshold (clamped to [-20, -15] dB) AND VH below -22 dB.",
+    "  3. Flood (new water) = water on the post-event image, not water before, AND a VV drop >= 3 dB.",
+    "  4. Terrain screening: HAND <= 15 m and slope <= 8 deg (removes radar shadow on hills).",
+    "  5. OpenCV morphological opening + connected components >= MIN_PIXELS to drop speckle noise."
+  ],
+  "terrain_sinks": {
+    "n": 291,
+    "area_ha": 288.1
+  }
+}

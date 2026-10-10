@@ -1,0 +1,205 @@
+{
+  "summary": {
+    "places_checked": 11,
+    "in_scope": 8,
+    "in_scope_with_majority_high_or_very_high_buildings": 3,
+    "mean_pct_high_or_very_high_near_reported": 36.4,
+    "city_base_rate_pct_high_or_very_high": 24.6,
+    "mean_pct_very_high_near_reported": 2.9,
+    "city_base_rate_pct_very_high": 0.8,
+    "radius_m": 500,
+    "caveat": "Small non-random sample of severe sites near the Tawi; sanity check, not an accuracy estimate."
+  },
+  "places": [
+    {
+      "name": "Peerkho",
+      "reported": "inundated",
+      "sources": [
+        "https://www.onmanorama.com/news/india/2025/08/27/jammu-floods-over-3500-resuced-by-army-ndrf-personnel.html",
+        "https://www.sphereindia.org.in/sites/default/files/2025-09/SitRep_02-_J&K_Cloudburst,_Flood,_and_Landslide_28-08-2025[1].pdf"
+      ],
+      "matched": "Peerkho Ropeway Station",
+      "type": "PointOfInterest",
+      "lon": 74.87631,
+      "lat": 32.73485,
+      "in_scope": true,
+      "buildings_within_500m": 1199,
+      "pct_high_or_very_high": 10.0,
+      "pct_very_high": 0.0,
+      "radar_water_within_500m": false,
+      "area_id": "JMU-093",
+      "area_tier": "high",
+      "area_flood_score": 0.459
+    },
+    {
+      "name": "Nikki Tawi",
+      "reported": "inundated",
+      "sources": [
+        "https://www.onmanorama.com/news/india/2025/08/27/jammu-floods-over-3500-resuced-by-army-ndrf-personnel.html",
+        "https://www.sphereindia.org.in/sites/default/files/2025-09/SitRep_02-_J&K_Cloudburst,_Flood,_and_Landslide_28-08-2025[1].pdf"
+      ],
+      "matched": "Tawi Bridge, Ware House, Jabah, Jammu 180001, India",
+      "type": "Street",
+      "lon": 74.85848,
+      "lat": 32.71881,
+      "in_scope": true,
+      "buildings_within_500m": 552,
+      "pct_high_or_very_high": 67.0,
+      "pct_very_high": 10.7,
+      "radar_water_within_500m": false,
+      "area_id": "JMU-129",
+      "area_tier": "medium",
+      "area_flood_score": 0.724
+    },
+    {
+      "name": "Gujjar Nagar",
+      "reported": "inundated",
+      "sources": [
+        "https://www.onmanorama.com/news/india/2025/08/27/jammu-floods-over-3500-resuced-by-army-ndrf-personnel.html"
+      ],
+      "matched": "Gujjar Nagar, Jammu, Jammu & Kashmir, India",
+      "type": "District",
+      "lon": 74.87412,
+      "lat": 32.72747,
+      "in_scope": true,
+      "buildings_within_500m": 911,
+      "pct_high_or_very_high": 48.5,
+      "pct_very_high": 0.0,
+      "radar_water_within_500m": false,
+      "area_id": "JMU-110",
+      "area_tier": "medium",
+      "area_flood_score": 0.382
+    },
+    {
+      "name": "Beli Charan",
+      "reported": "inundated",
+      "sources": [
+        "https://www.onmanorama.com/news/india/2025/08/27/jammu-floods-over-3500-resuced-by-army-ndrf-personnel.html"
+      ],
+      "matched": "Belicharana, Jammu, Jammu & Kashmir, India",
+      "type": "District",
+      "lon": 74.84775,
+      "lat": 32.71329,
+      "in_scope": true,
+      "buildings_within_500m": 630,
+      "pct_high_or_very_high": 64.0,
+      "pct_very_high": 3.5,
+      "radar_water_within_500m": false,
+      "area_id": "JMU-148",
+      "area_tier": "medium",
+      "area_flood_score": 0.571
+    },
+    {
+      "name": "Gurkha Nagar",
+      "reported": "inundated",
+      "sources": [
+        "https://www.onmanorama.com/news/india/2025/08/27/jammu-floods-over-3500-resuced-by-army-ndrf-personnel.html"
+      ],
+      "matched": "Gorkha Nagar, Jammu, Jammu & Kashmir, India",
+      "type": "District",
+      "lon": 74.8804,
+      "lat": 32.72144,
+      "in_scope": true,
+      "buildings_within_500m": 1220,
+      "pct_high_or_very_high": 8.4,
+      "pct_very_high": 0.0,
+      "radar_water_within_500m": false,
+      "area_id": "JMU-125",
+      "area_tier": "low",
+      "area_flood_score": 0.121
+    },
+    {
+      "name": "Qasim Nagar",
+      "reported": "inundated",
+      "sources": [
+        "https://www.onmanorama.com/news/india/2025/08/27/jammu-floods-over-3500-resuced-by-army-ndrf-personnel.html"
+      ],
+      "matched": "Qasim Nagar, Jammu, Jammu & Kashmir, India",
+      "type": "District",
+      "lon": 74.90073,
+      "lat": 32.72201,
+      "in_scope": true,
+      "buildings_within_500m": 569,
+      "pct_high_or_very_high": 13.9,
+      "pct_very_high": 0.0,
+      "radar_water_within_500m": false,
+      "area_id": "JMU-121",
+      "area_tier": "low",
+      "area_flood_score": 0.036
+    },
+    {
+      "name": "Rajiv Nagar",
+      "reported": "inundated",
+      "sources": [
+        "https://www.onmanorama.com/news/india/2025/08/27/jammu-floods-over-3500-resuced-by-army-ndrf-personnel.html"
+      ],
+      "matched": "Chamunda Mata Mandir Rajiv Nagar",
+      "type": "PointOfInterest",
+      "lon": 74.89571,
+      "lat": 32.71984,
+      "in_scope": true,
+      "buildings_within_500m": 867,
+      "pct_high_or_very_high": 12.1,
+      "pct_very_high": 0.0,
+      "radar_water_within_500m": false,
+      "area_id": "JMU-138",
+      "area_tier": "medium",
+      "area_flood_score": 0.049
+    },
+    {
+      "name": "Bhagwati Nagar",
+      "reported": "bridge damaged",
+      "sources": [
+        "https://www.newsonair.gov.in/incessant-rains-wreak-havoc-across-jammu-division-in-past-40-hours"
+      ],
+      "matched": "Bhagwati Nagar, Talab Tillo, Jammu, Jammu & Kashmir, India",
+      "type": "SubDistrict",
+      "lon": 74.84598,
+      "lat": 32.72202,
+      "in_scope": true,
+      "buildings_within_500m": 578,
+      "pct_high_or_very_high": 67.0,
+      "pct_very_high": 9.2,
+      "radar_water_within_500m": false,
+      "area_id": "JMU-131",
+      "area_tier": "medium",
+      "area_flood_score": 0.734
+    },
+    {
+      "name": "RS Pura",
+      "reported": "inundated",
+      "sources": [
+        "https://www.onmanorama.com/news/india/2025/08/27/jammu-floods-over-3500-resuced-by-army-ndrf-personnel.html"
+      ],
+      "matched": "R S Pura Road, Lower Gadigarh, Gadigarh, Jammu 181101, India",
+      "type": "Street",
+      "lon": 74.83494,
+      "lat": 32.65922,
+      "in_scope": false
+    },
+    {
+      "name": "Akhnoor",
+      "reported": "inundated",
+      "sources": [
+        "https://www.onmanorama.com/news/india/2025/08/27/jammu-floods-over-3500-resuced-by-army-ndrf-personnel.html"
+      ],
+      "matched": "Akhnoor, Jammu & Kashmir, India",
+      "type": "Locality",
+      "lon": 74.73764,
+      "lat": 32.89743,
+      "in_scope": false
+    },
+    {
+      "name": "Pargwal",
+      "reported": "inundated",
+      "sources": [
+        "https://www.onmanorama.com/news/india/2025/08/27/jammu-floods-over-3500-resuced-by-army-ndrf-personnel.html"
+      ],
+      "matched": "Police Station-Police Post Pargwal",
+      "type": "PointOfInterest",
+      "lon": 74.60413,
+      "lat": 32.79562,
+      "in_scope": false
+    }
+  ]
+}
