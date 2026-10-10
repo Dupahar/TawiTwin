@@ -7,6 +7,7 @@
 **Monsoon and heat command for Jammu, building by building.** Ask in Hindi, Hinglish or English, and get the 48-hour flood and heat risk for *your* street, plus what to do about it.
 
 [![Try it live](https://img.shields.io/badge/🌍_Try_it_live-on_AWS-FF9900?style=for-the-badge&logo=amazonwebservices&logoColor=white)](https://d2r8k00l2fxqnu.cloudfront.net)
+[![Watch the film](https://img.shields.io/badge/▶_Watch_the_film-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/7ypGLr-2Zvk)
 [![Read the story](https://img.shields.io/badge/📖_Read_the_story-blog-222222?style=for-the-badge)](docs/blog.md)
 
 ![AWS Lambda](https://img.shields.io/badge/AWS_Lambda-FF9900?logo=awslambda&logoColor=white)
@@ -19,6 +20,10 @@
 ![Mapbox](https://img.shields.io/badge/Mapbox_GL-000000?logo=mapbox&logoColor=white)
 ![Sentinel-1](https://img.shields.io/badge/Sentinel--1-radar-0B3D91)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
+<a href="https://youtu.be/7ypGLr-2Zvk"><img src="https://img.youtube.com/vi/7ypGLr-2Zvk/hqdefault.jpg" alt="Tawi Twin film on YouTube" width="720"></a>
+
+*▶ Click to watch the film*
 
 **👉 Try it:** hit **Replay the flood**, then ask *"Kal Bhagwati Nagar mein paani bharega?"*
 
@@ -119,15 +124,6 @@ Rajiv Nagar, Peerkho (8–14%). Likely causes: the 30 m elevation model includes
 18:34 IST on 27 Aug, a day after the peak. Eight places is a sanity check, not an accuracy estimate. We did not tune
 the model on them. Details: `scripts/validate_reports.py`, `data/derived/validation_2025.json`.
 
-## ⚠️ Honest limits
-
-- Radar misses water between buildings; the 2025 flood map is a lower bound in dense neighbourhoods.
-- The Tawi flood-prone belt is a proxy (riverbed + 200 m); the official demarcation is not public.
-- OpenStreetMap maps only 56 drains/streams/canals here, so drain priorities cover those only.
-- Building heights are a uniform 6 m (not in the source data).
-- Scores are relative and indicative, not calibrated. Land-cover change is *detected change*, not a finding of
-  encroachment. **Not an official warning:** follow JMC, SDMA and IMD. Emergency: 112.
-- Officer actions use a shared demo key; production would use Amazon Cognito.
 
 ## 🚀 Run it yourself
 
@@ -148,12 +144,8 @@ scripts/   data pipeline, deploy, validation      site/  static web app (Mapbox 
 tests/     live smoke test                        docs/  screenshots, blog, video script
 ```
 
-## 🙏 Prior work and credits
+## 🙏 Credits
 
-- **Prior work:** the land-cover change
-  flags and the Landsat heat grid come from the author's LandGuard prototype (3 Oct 2026), ported by
-  `scripts/port_landguard.py`; the Sentinel-1 approach comes from the author's WaterGuard prototype (6 Oct 2026).
-  This repository, the flood map of 27 Aug 2025, buildings, agent, alerts, reports and deployment are new.
 - **Models:** the deployed agent and photo triage run on Amazon Nova Pro via Amazon Bedrock.
 - **Data:** Copernicus Sentinel-1/-2 and DEM (ESA, via Microsoft Planetary Computer), USGS Landsat,
   © OpenStreetMap contributors (ODbL, via ohsome), Overture Maps Foundation (ODbL/CDLA), Open-Meteo (CC BY 4.0),
